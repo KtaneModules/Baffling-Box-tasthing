@@ -101,7 +101,7 @@ public class bafflingBox : MonoBehaviour
         }
         Debug.LogFormat("[Baffling Box #{0}] Displayed colors (YZX): {1}.", moduleId, colorOrder.Select(x => colorNames[x]).Join(", "));
         axisOrder = table1[shapeChosen + bomb.GetSerialNumberNumbers().Last() % 2 == 0 ? 0 : 3].ToArray();
-        Debug.LogFormat("[Baffling Box #{0}] The axis order is {1}.", moduleId, axisOrder.Select(x => "YXZ"[x]).Join(""));
+        Debug.LogFormat("[Baffling Box #{0}] The axis order is {1}.", moduleId, axisOrder.Select(x => "YZX"[x]).Join(""));
         var str = "";
         for (int i = 0; i < 3; i++)
             str += "GOR"[colorOrder[axisOrder[i]]];
