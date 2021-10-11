@@ -1970,7 +1970,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ModuleType: bafflingBox
   ModuleDisplayName: Baffling Box
-  RequiresTimerVisibility: 0
+  RequiresTimerVisibility: 1
 --- !u!114 &114819365715653450
 MonoBehaviour:
   m_ObjectHideFlags: 1

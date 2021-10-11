@@ -33,12 +33,12 @@ public class bafflingBox : MonoBehaviour
     public static readonly string[] colorNames = new string[] { "green", "orange", "red" };
     private static readonly int[][] table1 = new int[][]
     {
-        new int[] { 1, 0, 2 },      
-        new int[] { 2, 1, 0 },        
-        new int[] { 0, 2, 1 },        
-        new int[] { 0, 1, 2 },        
-        new int[] { 1, 2, 0 },        
-        new int[] { 2, 0, 1 },        
+        new int[] { 2, 0, 1 },
+        new int[] { 1, 2, 0 },
+        new int[] { 0, 1, 2 },
+        new int[] { 0, 2, 1 },
+        new int[] { 2, 1, 0 },
+        new int[] { 1, 0, 2 },
     };
     private static readonly string[] table2 = new string[] { "ROG", "GRO", "OGR", "ORG", "RGO", "GOR" };
 
@@ -100,7 +100,8 @@ public class bafflingBox : MonoBehaviour
             }
         }
         Debug.LogFormat("[Baffling Box #{0}] Displayed colors (YZX): {1}.", moduleId, colorOrder.Select(x => colorNames[x]).Join(", "));
-        axisOrder = table1[shapeChosen + bomb.GetSerialNumberNumbers().Last() % 2 == 0 ? 0 : 3].ToArray();
+        var add = bomb.GetSerialNumberNumbers().Last() % 2 == 0 ? 0 : 3;
+        axisOrder = table1[shapeChosen + add].ToArray();
         Debug.LogFormat("[Baffling Box #{0}] The axis order is {1}.", moduleId, axisOrder.Select(x => "YZX"[x]).Join(""));
         var str = "";
         for (int i = 0; i < 3; i++)
