@@ -25,6 +25,7 @@ public class bafflingBox : MonoBehaviour
     public GameObject hidable;
 
     private int shapeChosen;
+    private int[] shapeOrder = new int[3];
     private int[] colorOrder = new int[3];
     private int[] axisOrder = new int[3];
     private int solution;
@@ -54,30 +55,29 @@ public class bafflingBox : MonoBehaviour
 
     private void Start()
     {
-        shapeChosen = rnd.Range(0, 3);
         colorOrder = Enumerable.Range(0, 3).ToList().Shuffle().ToArray();
-        switch (shapeChosen)
+        shapeOrder = Enumerable.Range(0, 3).ToList().Shuffle().ToArray();
+        for (int i = 0; i < 3; i++)
         {
-            case 0:
-                foreach (Renderer sphere in spheres)
-                    sphere.gameObject.SetActive(false);
-                foreach (Renderer cylinder in cylinders)
-                    cylinder.gameObject.SetActive(false);
-                break;
-            case 1:
-                foreach (Renderer cube in cubes)
-                    cube.gameObject.SetActive(false);
-                foreach (Renderer cylinder in cylinders)
-                    cylinder.gameObject.SetActive(false);
-                break;
-            case 2:
-                foreach (Renderer cube in cubes)
-                    cube.gameObject.SetActive(false);
-                foreach (Renderer sphere in spheres)
-                    sphere.gameObject.SetActive(false);
-                break;
+            if (shapeOrder[i] != 0)
+                cubes[i].gameObject.SetActive(false);
+            if (shapeOrder[i] != 1)
+                spheres[i].gameObject.SetActive(false);
+            if (shapeOrder[i] != 2)
+                cylinders[i].gameObject.SetActive(false);
         }
-        Debug.LogFormat("[Baffling Box #{0}] The box contains a {1}.", moduleId, shapeNames[shapeChosen]);
+        Debug.LogFormat("[Baffling Box #{0}] Order of shapes: {1}.", moduleId, shapeOrder.Select(x => shapeNames[x]).Join(", "));
+        int step1Index;
+        var lits = bomb.GetOnIndicators().Count();
+        var unlits = bomb.GetOffIndicators().Count();
+        if (lits < unlits)
+            step1Index = 0;
+        else if (lits > unlits)
+            step1Index = 1;
+        else
+            step1Index = 2;
+        shapeChosen = shapeOrder[step1Index];
+        Debug.LogFormat("[Baffling Box #{0}] Consider the shape in the {1} direction, which is a {2}.", moduleId, "YZX"[step1Index], shapeNames[shapeChosen]);
         for (int i = 0; i < 3; i++)
         {
             cubes[i].material = readMats[colorOrder[i]];
