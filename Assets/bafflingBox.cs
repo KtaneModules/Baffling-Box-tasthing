@@ -22,7 +22,7 @@ public class bafflingBox : MonoBehaviour
     public Renderer[] cubes;
     public Renderer[] spheres;
     public Renderer[] cylinders;
-    public GameObject hidable;
+    public GameObject box;
 
     private int shapeChosen;
     private int[] shapeOrder = new int[3];
@@ -108,6 +108,8 @@ public class bafflingBox : MonoBehaviour
             str += "GOR"[colorOrder[axisOrder[i]]];
         solution = Array.IndexOf(table2, str);
         Debug.LogFormat("[Baffling Box #{0}] This gives us the colors {1}, and the solution digit of {2}.", moduleId, str, solution);
+        StartCoroutine(ColorFade(box.GetComponent<Renderer>()));
+        StartCoroutine(ColorFade(button.GetComponent<Renderer>()));
     }
 
     private void PressButton()
@@ -116,7 +118,7 @@ public class bafflingBox : MonoBehaviour
         audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, button.transform);
         if (moduleSolved)
         {
-            hidable.SetActive(false);
+            StartCoroutine(HideAnimation());
             return;
         }
         var submmittedTime = ((int)bomb.GetTime()) % 60 / 10;
@@ -133,6 +135,37 @@ public class bafflingBox : MonoBehaviour
             moduleSolved = true;
             audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.CorrectChime, transform);
         }
+    }
+
+    private IEnumerator ColorFade(Renderer objectToColor)
+    {
+    restartCycle:
+        var elapsed = 0f;
+        var duration = 10f;
+        var startColor = objectToColor.material.color;
+        var shade = 1f - startColor.r;
+        var endColor = new Color(shade, shade, shade);
+        while (elapsed < duration)
+        {
+            objectToColor.material.color = Color.Lerp(startColor, endColor, elapsed / duration);
+            yield return null;
+            elapsed += Time.deltaTime;
+        }
+        objectToColor.material.color = endColor;
+        goto restartCycle;
+    }
+
+    private IEnumerator HideAnimation()
+    {
+        var givenDirection = rnd.onUnitSphere;
+        audio.PlaySoundAtTransform("out of sight out of mind fuck yourself", transform);
+        for (float x = .075f; x >= 0; x -= Time.deltaTime / 10f)
+        {
+            box.transform.localScale = new Vector3(x, x, x);
+            box.transform.Rotate(360f * givenDirection * Time.deltaTime);
+            yield return null;
+        }
+        box.SetActive(false);
     }
 
     // Twitch Plays

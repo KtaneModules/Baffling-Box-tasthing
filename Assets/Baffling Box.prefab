@@ -2080,7 +2080,7 @@ MonoBehaviour:
   - {fileID: 23848496698682616}
   - {fileID: 23889027032867698}
   - {fileID: 23686075573730802}
-  hidable: {fileID: 1346149685482112}
+  box: {fileID: 1346149685482112}
 --- !u!114 &114973030297822424
 MonoBehaviour:
   m_ObjectHideFlags: 1
